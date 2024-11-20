@@ -1,0 +1,190 @@
+public abstract class Flavor {
+    public abstract String getName();
+    public abstract double getPricePerScoop();
+}
+
+public class MintChocolateChip extends Flavor {
+    @Override
+    public String getName() {
+        return "Mint Chocolate Chip";
+    }
+    @Override
+    public double getPricePerScoop() {
+        return 2.80;
+    }
+}
+
+public class ChocolateFudge extends Flavor {
+    @Override
+    public String getName() {
+        return "Chocolate Fudge";
+    }
+    @Override
+    public double getPricePerScoop() {
+        return 3.00;
+    }
+}
+
+// Similarly, define StrawberrySwirl and PistachioDelight
+
+
+public abstract class Topping {
+    public abstract String getName();
+    public abstract double getPrice();
+}
+
+public class Sprinkles extends Topping {
+    @Override
+    public String getName() {
+        return "Sprinkles";
+    }
+    @Override
+    public double getPrice() {
+        return 0.30;
+    }
+}
+
+public class Marshmallow extends Topping {
+    @Override
+    public String getName() {
+        return "Marshmallow";
+    }
+    @Override
+    public double getPrice() {
+        return 0.70;
+    }
+}
+
+// Similarly, define CrushedOreo, FreshStrawberries, and ChocolateChips
+
+
+public abstract class Container {
+    public abstract String getName();
+    public abstract double getPrice();
+}
+
+public class PaperCup extends Container {
+    @Override
+    public String getName() {
+        return "Paper Cup";
+    }
+    @Override
+    public double getPrice() {
+        return 0.00;
+    }
+}
+
+public class WaffleCone extends Container {
+    @Override
+    public String getName() {
+        return "Waffle Cone";
+    }
+    @Override
+    public double getPrice() {
+        return 5.00;
+    }
+}
+
+
+import java.util.List;
+
+public class OrderItem {
+    private Flavor flavor;
+    private int scoops;
+    private List<Topping> toppings;
+
+    public OrderItem(Flavor flavor, int scoops, List<Topping> toppings) {
+        this.flavor = flavor;
+        this.scoops = scoops;
+        this.toppings = toppings;
+    }
+
+    public double calculatePrice() {
+        double total = flavor.getPricePerScoop() * scoops;
+        for (Topping topping : toppings) {
+            total += topping.getPrice();
+        }
+        return total;
+    }
+
+    public String getDescription() {
+        StringBuilder description = new StringBuilder();
+        description.append(flavor.getName()).append(" - ").append(scoops)
+                   .append(" scoop: $").append(String.format("%.2f", flavor.getPricePerScoop() * scoops));
+        for (Topping topping : toppings) {
+            description.append("\n").append(topping.getName()).append(" - 1 time: $")
+                       .append(String.format("%.2f", topping.getPrice()));
+        }
+        return description.toString();
+    }
+}
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Order {
+    private List<OrderItem> items;
+    private Container container;
+
+    public Order(Container container) {
+        this.items = new ArrayList<>();
+        this.container = container;
+    }
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+    }
+
+    public double calculateSubtotal() {
+        double subtotal = container.getPrice();
+        for (OrderItem item : items) {
+            subtotal += item.calculatePrice();
+        }
+        return subtotal;
+    }
+
+    public double calculateTax() {
+        return calculateSubtotal() * 0.08;
+    }
+
+    public double calculateTotal() {
+        return calculateSubtotal() + calculateTax();
+    }
+
+    public List<String> getOrderDetails() {
+        List<String> details = new ArrayList<>();
+        for (OrderItem item : items) {
+            details.add(item.getDescription());
+        }
+        details.add("Subtotal: $" + String.format("%.2f", calculateSubtotal()));
+        details.add("Tax: $" + String.format("%.2f", calculateTax()));
+        details.add("Total Amount Due: $" + String.format("%.2f", calculateTotal()));
+        return details;
+    }
+}
+
+
+import java.util.Arrays;
+
+public class IceCreamShop {
+    public static void main(String[] args) {
+        // Create order
+        Order order = new Order(new WaffleCone());
+
+        // Add items to the order
+        order.addItem(new OrderItem(new ChocolateFudge(), 1, Arrays.asList(new ChocolateChips(), new FreshStrawberries())));
+        order.addItem(new OrderItem(new MintChocolateChip(), 1, Arrays.asList()));
+
+        // Print total price
+        System.out.println("Total: $" + String.format("%.2f", order.calculateTotal()));
+
+        // Generate invoice
+        try {
+            InvoiceGenerator.generateInvoice(order, "invoice.txt");
+            System.out.println("Invoice generated successfully.");
+        } catch (IOException e) {
+            System.out.println("Failed to generate invoice.");
+        }
+    }
+}

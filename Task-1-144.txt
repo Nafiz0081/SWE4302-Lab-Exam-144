@@ -1,0 +1,45 @@
+
+Class Name: Inventory System
+
+Line 7 - Primitive Obsession -
+
+Line (32-37) - Duplicate Code- No need to create another class named OrderItem. The Product class is enough
+
+Line (41-42) - Long parameters 
+
+Line (44-67) - Conditional complexity - Too much Nested If else
+
+Line (77-99) - Conditional Complexity - Excessive use of switch statements
+
+Line - 105,113,123 - Magic numbers 
+
+Line (132-155) -Long Method - ProcessOrder method is too much long
+
+Line 160- Primitve Obsession
+
+Line 80,84,85,87,91,92,93- Magic Numbers -Numbers like 0.85,0.95,0.8 are being used randomly
+
+
+
+
+Class Name: globalInventoryData
+
+
+Line 12,13 - primitive obsession -
+
+line (9-13) -Global Data - Use of static
+
+Line 16- primitive obsession- using numbers like 1 and 100 randomly
+
+
+
+Class Name: WareHouse 
+
+Line 8 - Poor Naming - variable name is "i"
+
+
+Class Name : InventoryManagementSystem
+
+line 11,12 - Message Chaining -
+
+Line 11,12 - Law of Demeter broken- 
