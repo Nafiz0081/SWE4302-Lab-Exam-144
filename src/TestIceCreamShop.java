@@ -71,9 +71,9 @@ public class TestIceCreamShop{
         String fileName = "test_invoice.txt";
 
         try {
-            InvoiceGenerator.generateInvoice(order, fileName);
+            InvoiceGenerator.generateInvoice(order);
 
-         
+
             List<String> lines = Files.readAllLines(Paths.get(fileName));
             assertTrue(lines.contains("Mint Chocolate Chip - 1 scoop: $2.80"));
             assertTrue(lines.contains("Chocolate Chips - 1 time: $0.50"));
